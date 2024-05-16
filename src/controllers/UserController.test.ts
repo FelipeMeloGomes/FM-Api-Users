@@ -4,20 +4,30 @@ import { UserController } from "./UserController";
 import { Request } from "express";
 
 describe("UserController", () => {
-    const mockUserService: Partial<UserService> = { createUser: jest.fn() };
+    const mockUserService: Partial<UserService> = {
+        createUser: jest.fn(),
+        deleteUser: jest.fn(),
+        getAllUsers: jest.fn(),
+    };
 
     const userController = new UserController(mockUserService as UserService);
 
-    it("Add new User", () => {
+    it("Delete User", () => {
         const mockReq = {
             body: {
                 name: "Felipe",
-                email: "felipeme@gmail",
+                email: "lucas@gmail",
             },
         } as Request;
         const mockRep = makeMockRep();
-        userController.createUser(mockReq, mockRep);
-        expect(mockRep.state.status).toBe(201);
-        expect(mockRep.state.json).toMatchObject({ message: "Created User" });
+        userController.deleteUser(mockReq, mockRep);
+        expect(mockUserService.deleteUser).toHaveBeenCalledWith(
+            "Felipe",
+            "lucas@gmail"
+        );
+        expect(mockRep.state.status).toBe(200);
+        expect(mockRep.state.json).toMatchObject({
+            message: "User deleted successfully",
+        });
     });
 });
