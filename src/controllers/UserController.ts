@@ -8,43 +8,22 @@ export class UserController {
         this.userService = userService;
     }
 
-    verifyRequiredField = (
-        objeto: any,
-        field: string,
-        message: string,
-        res: Response
-    ) => {
-        if (!objeto[field]) {
-            return res
+    createUser = (request: Request, response: Response): Response => {
+        const user = request.body;
+
+        if (!user.name || !user.email || !user.password) {
+            return response
                 .status(400)
-                .json({ message: `Bad request! ${message} obrigatório` });
+                .json({
+                    message: `Bad request! Todos os campos são obrigatórios`,
+                });
         }
+
+        this.userService.createUser(user.name, user.email, user.password);
+        return response.status(201).json({ message: "Created user" });
     };
 
-    createUser = (req: Request, res: Response) => {
-        const user = req.body;
-
-        this.verifyRequiredField(user, "name", "Name", res);
-        this.verifyRequiredField(user, "email", "Email", res);
-
-        this.userService.createUser(user.name, user.email);
-
-        return res.status(201).json({ message: "Created User" });
-    };
-
-    deleteUser = (req: Request, res: Response) => {
-        const { name, email } = req.body;
-
-        this.verifyRequiredField({ name, email }, "name", "Name", res);
-        this.verifyRequiredField({ name, email }, "email", "Email", res);
-
-        this.userService.deleteUser(name, email);
-
-        return res.status(200).json({ message: "User deleted successfully" });
-    };
-
-    getAllUsers = (req: Request, res: Response) => {
-        const users = this.userService.getAllUsers();
-        return res.status(200).json(users);
+    getUser = (request: Request, response: Response) => {
+        return response.status(200);
     };
 }

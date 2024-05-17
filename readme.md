@@ -8,4 +8,8 @@ O Dio Bank é uma aplicação simples desenvolvida com conceitos básicos de Typ
 
 -   Typescript
 -   javaScript
+-   Node
 -   Jest
+-   Typeorm
+-   Banco de dados
+-   Testes unitários
